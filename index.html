@@ -12,28 +12,36 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #4CAF50;
+            width: 70px;
+            height: 70px;
+            background-color: #FF69B4; /* pinkish color */
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            flex-direction: column;
+            text-align: center;
+            padding: 5px;
         }
         #chat-icon img {
             width: 40px;
+        }
+        #chat-icon span {
+            font-size: 10px;
+            color: white;
+            margin-top: 5px;
         }
         #chatbox {
             display: none;
             position: fixed;
             bottom: 100px;
             right: 20px;
-            width: 300px;
-            background-color: #f4f4f4;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            background-color: #fff0f5;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             padding: 10px;
             max-height: 400px;
             overflow-y: auto;
@@ -41,31 +49,29 @@
         #chatbox .messages {
             margin: 10px 0;
             padding: 5px;
+            max-height: 300px;
+            overflow-y: auto;
         }
         .message {
             margin-bottom: 10px;
         }
         .message-user {
             text-align: right;
+            font-weight: bold;
         }
         .message-bot {
             text-align: left;
-            background-color: #ddd;
+            background-color: #ffe4e1;
             padding: 8px;
-            border-radius: 5px;
-        }
-        .message-user .message-bot {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .message-bot p {
-            margin: 0;
+            border-radius: 8px;
+            max-width: 90%;
         }
         #user-input {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -73,75 +79,99 @@
 
 <!-- Chat Icon -->
 <div id="chat-icon">
-    <img src="cartoon-icon.png" alt="FinFlora Chat Icon" />
+    <img src="cartoon-icon.png" alt="FinFlora" />
+    <span>Connect to FinFlora</span>
 </div>
 
 <!-- Chatbox -->
 <div id="chatbox">
-    <div class="messages">
+    <div class="messages" id="messages">
         <div class="message-bot">
-            <p>Namaste! I am FinFlora. How can I assist you today?</p>
+            <p>Namaste! 🌸 I am FinFlora, your chat assistant. How can I help you today?</p>
         </div>
     </div>
-    <input type="text" id="user-input" placeholder="Ask me anything...">
+    <input type="text" id="user-input" placeholder="Type your question...">
 </div>
 
 <script>
     const questionsAndAnswers = {
-        "What is a Mutual Fund?": "A mutual fund pools money from investors and invests in securities like stocks, bonds, etc.",
-        "What is SIP?": "SIP or Systematic Investment Plan allows you to invest a fixed amount regularly in mutual funds.",
-        "What is NAV?": "NAV stands for Net Asset Value. It is the market value of a mutual fund unit.",
-        "Are mutual funds safe?": "Mutual funds are subject to market risks. Read all scheme-related documents carefully before investing.",
-        "What is the minimum amount to start a SIP?": "You can start a SIP with as low as ₹500 per month in many mutual fund schemes.",
-        "Can I withdraw money from my mutual fund anytime?": "Yes, in open-ended mutual funds you can redeem your units anytime. Exit load may apply.",
-        "What is an emergency fund?": "An emergency fund is savings set aside to cover unexpected financial needs.",
-        "What is compounding?": "Compounding is earning returns on your previous returns, helping your money grow faster over time.",
-        "What is risk in mutual funds?": "Different mutual funds have different risk levels — equity funds are high-risk, debt funds are low-risk.",
-        "How to choose the right mutual fund?": "Choose based on your goals, risk appetite, and investment horizon. Consult a financial advisor if needed.",
-        "Who is Anushka Gaiki?": "Anushka Dhananjay Gaiki is an AMFI Registered mutual fund distributor empanelled with NJ Wealth and a founder of Grow Fin Wealth.",
-        "Why to choose Grow Fin Wealth?": "Grow Fin Wealth is owned by Anushka Dhananjay Gaiki who is an AMFI Registered Mutual Fund Distributor empanelled with NJ Wealth.",
-        "Is Grow Fin Wealth safe?": "Yes! Grow Fin Wealth is a trusted platform as it's owner Anushka Dhananjay Gaiki is empaneled with NJ Wealth, ensuring transparency, security, and compliance.",
-        "Who is the owner of Grow Fin Wealth?": "The owner of Grow Fin Wealth is Anushka Dhananjay Gaiki, an AMFI Registered mutual fund distributor empanelled with NJ Wealth."
+        "mutual fund": "Mutual Fund ek aisa investment hai jisme kai log apna paisa mila ke stocks, bonds jaise assets me invest karte hain.",
+        "sip": "SIP yaani Systematic Investment Plan ek tarika hai jahaan aap har mahine thodi-thodi rakam invest karte hain mutual funds me.",
+        "nav": "NAV yaani Net Asset Value ek mutual fund unit ki market value ko dikhata hai.",
+        "mutual funds safe": "Mutual Funds market risk ke saath jude hote hain. Kripya scheme related documents dhyan se padhe investment se pehle.",
+        "minimum amount sip": "Bohot saare funds me aap ₹500 per month se bhi SIP shuru kar sakte hain.",
+        "withdraw mutual fund": "Open-ended mutual funds me aap kabhi bhi apne paise nikal sakte hain, lekin kuch cases me exit load lag sakta hai.",
+        "emergency fund": "Emergency Fund ek savings hoti hai jo unexpected situations jaise job loss ya medical emergency ke liye rakhi jaati hai.",
+        "compounding": "Compounding ka matlab hai aapke returns pe bhi returns milna — jisse paisa tez se badhta hai.",
+        "risk mutual fund": "Har mutual fund ka risk level alag hota hai: equity funds jyada risk wale, debt funds kam risk wale hote hain.",
+        "choose right mutual fund": "Aapke investment goal, risk tolerance aur time horizon ke basis pe sahi mutual fund chunna chahiye. Advisor se salah lena bhi acha rahega.",
+        "anushka gaiki": "Anushka Dhananjay Gaiki ek AMFI Registered Mutual Fund Distributor hain, aur Grow Fin Wealth ki founder hain.",
+        "grow fin wealth": "Grow Fin Wealth Anushka Dhananjay Gaiki ke dwara chalaya jata hai jo NJ Wealth ke sath empaneled hain.",
+        "safe grow fin wealth": "Haan! Grow Fin Wealth bilkul safe aur transparent platform hai kyunki iska operation NJ Wealth ke through registered hai."
     };
 
     const chatIcon = document.getElementById("chat-icon");
     const chatbox = document.getElementById("chatbox");
     const userInput = document.getElementById("user-input");
+    const messagesContainer = document.getElementById("messages");
 
     chatIcon.onclick = function() {
         chatbox.style.display = "block";
     };
 
     userInput.addEventListener("keypress", function(e) {
-        if (e.key === "Enter") {
-            let userMessage = userInput.value;
-            let botMessage = getBotResponse(userMessage);
-            displayMessage(userMessage, 'user');
-            displayMessage(botMessage, 'bot');
+        if (e.key === "Enter" && userInput.value.trim() !== "") {
+            handleUserMessage(userInput.value.trim());
             userInput.value = '';
         }
     });
 
+    function handleUserMessage(message) {
+        displayMessage(message, 'user');
+        const botReply = getBotResponse(message);
+        setTimeout(() => {
+            displayMessage(botReply, 'bot');
+            if (botReply.includes('Contact Us')) {
+                displayMessage("Visit 'Contact Us' section for more detailed help!", 'bot');
+            }
+        }, 500);
+    }
+
     function getBotResponse(userMessage) {
-        const lowerCaseMessage = userMessage.toLowerCase();
-        for (let question in questionsAndAnswers) {
-            if (lowerCaseMessage.includes(question.toLowerCase())) {
-                return questionsAndAnswers[question];
+        const message = userMessage.toLowerCase();
+
+        // Check if user is satisfied
+        if (message.includes("thank you") || message.includes("thanks") || message.includes("satisfied")) {
+            return "I hope you are satisfied with my answers! 😊 Agar aur kuch chahiye toh 'Contact Us' section check kar sakte hain.";
+        }
+
+        // If user says they are not satisfied
+        if (message.includes("not satisfied") || message.includes("bad") || message.includes("unsatisfied")) {
+            return "I'm sorry! 😔 You can contact us through the 'Contact Us' section.";
+        }
+
+        // Search FAQs
+        for (let keyword in questionsAndAnswers) {
+            if (message.includes(keyword)) {
+                return questionsAndAnswers[keyword];
             }
         }
-        if (userMessage.toLowerCase().includes("contact us")) {
-            return "Please visit our 'Contact Us' section for further assistance.";
-        } else {
-            return "Sorry, I need to read more about this. Please check back later.";
+
+        // Contact us request
+        if (message.includes("contact") || message.includes("extra information") || message.includes("details")) {
+            return "Agar aapko extra information chahiye, toh aap 'Contact Us' tab se humse sampark kar sakte hain.";
         }
+
+        // Unrelated question
+        return "Maaf kijiye, mujhe iske baare mein aur padhna padega. 🤔 Please visit 'Contact Us' section for assistance.";
     }
 
     function displayMessage(message, sender) {
         const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
-        messageElement.classList.add(`message-${sender}`);
-        messageElement.innerHTML = `<div class="message-bot"><p>${message}</p></div>`;
-        document.querySelector('.messages').appendChild(messageElement);
+        messageElement.classList.add('message', sender === 'user' ? 'message-user' : 'message-bot');
+        messageElement.innerHTML = `<p>${message}</p>`;
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 </script>
 

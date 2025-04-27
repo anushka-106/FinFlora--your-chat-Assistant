@@ -14,7 +14,7 @@
             right: 20px;
             width: 70px;
             height: 70px;
-            background-color: #FF69B4; /* Pinkish color */
+            background-color: #FF69B4; /* pinkish color */
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -27,7 +27,6 @@
         }
         #chat-icon img {
             width: 40px;
-            border-radius: 50%;
         }
         #chat-icon span {
             font-size: 10px;
@@ -80,4 +79,101 @@
 
 <!-- Chat Icon -->
 <div id="chat-icon" onclick="toggleChatbox()">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Telegram_Logo.svg/1024px-Telegram
+    <img src="cartoon-icon.png" alt="FinFlora" />
+    <span>Connect to FinFlora</span>
+</div>
+
+<!-- Chatbox -->
+<div id="chatbox">
+    <div class="messages" id="messages">
+        <div class="message-bot">
+            <p>Namaste! 🌸 I am FinFlora, your chat assistant. How can I help you today?</p>
+        </div>
+    </div>
+    <input type="text" id="user-input" placeholder="Type your question...">
+</div>
+
+<script>
+    const questionsAndAnswers = {
+        "mutual fund": "Mutual Fund ek aisa investment hai jisme kai log apna paisa mila ke stocks, bonds jaise assets me invest karte hain.",
+        "sip": "SIP yaani Systematic Investment Plan ek tarika hai jahaan aap har mahine thodi-thodi rakam invest karte hain mutual funds me.",
+        "nav": "NAV yaani Net Asset Value ek mutual fund unit ki market value ko dikhata hai.",
+        "mutual funds safe": "Mutual Funds market risk ke saath jude hote hain. Kripya scheme related documents dhyan se padhe investment se pehle.",
+        "minimum amount sip": "Bohot saare funds me aap ₹500 per month se bhi SIP shuru kar sakte hain.",
+        "withdraw mutual fund": "Open-ended mutual funds me aap kabhi bhi apne paise nikal sakte hain, lekin kuch cases me exit load lag sakta hai.",
+        "emergency fund": "Emergency Fund ek savings hoti hai jo unexpected situations jaise job loss ya medical emergency ke liye rakhi jaati hai.",
+        "compounding": "Compounding ka matlab hai aapke returns pe bhi returns milna — jisse paisa tez se badhta hai.",
+        "risk mutual fund": "Har mutual fund ka risk level alag hota hai: equity funds jyada risk wale, debt funds kam risk wale hote hain.",
+        "choose right mutual fund": "Aapke investment goal, risk tolerance aur time horizon ke basis pe sahi mutual fund chunna chahiye. Advisor se salah lena bhi acha rahega.",
+        "anushka gaiki": "Anushka Dhananjay Gaiki ek AMFI Registered Mutual Fund Distributor hain, aur Grow Fin Wealth ki founder hain.",
+        "grow fin wealth": "Grow Fin Wealth Anushka Dhananjay Gaiki ke dwara chalaya jata hai jo NJ Wealth ke through empaneled hain.",
+        "safe grow fin wealth": "Haan! Grow Fin Wealth bilkul safe aur transparent platform hai kyunki iska operation NJ Wealth ke through registered hai."
+    };
+
+    const chatIcon = document.getElementById("chat-icon");
+    const chatbox = document.getElementById("chatbox");
+    const userInput = document.getElementById("user-input");
+    const messagesContainer = document.getElementById("messages");
+
+    chatIcon.onclick = function() {
+        chatbox.style.display = "block";
+    };
+
+    userInput.addEventListener("keypress", function(e) {
+        if (e.key === "Enter" && userInput.value.trim() !== "") {
+            handleUserMessage(userInput.value.trim());
+            userInput.value = '';
+        }
+    });
+
+    function handleUserMessage(message) {
+        displayMessage(message, 'user');
+        const botReply = getBotResponse(message);
+        setTimeout(() => {
+            displayMessage(botReply, 'bot');
+            if (botReply.includes('Contact Us')) {
+                displayMessage("Visit 'Contact Us' section for more detailed help!", 'bot');
+            }
+        }, 500);
+    }
+
+    function getBotResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+
+        // Check if user is satisfied
+        if (message.includes("thank you") || message.includes("thanks") || message.includes("satisfied")) {
+            return "I hope you are satisfied with my answers! 😊 Agar aur kuch chahiye toh 'Contact Us' section check kar sakte hain.";
+        }
+
+        // If user says they are not satisfied
+        if (message.includes("not satisfied") || message.includes("bad") || message.includes("unsatisfied")) {
+            return "I'm sorry! 😔 You can contact us through the 'Contact Us' section.";
+        }
+
+        // Search FAQs based on keywords
+        for (let keyword in questionsAndAnswers) {
+            if (message.includes(keyword)) {
+                return questionsAndAnswers[keyword];
+            }
+        }
+
+        // Contact us request
+        if (message.includes("contact") || message.includes("extra information") || message.includes("details")) {
+            return "Agar aapko extra information chahiye, toh aap 'Contact Us' tab se humse sampark kar sakte hain.";
+        }
+
+        // Unrelated question
+        return "Maaf kijiye, mujhe iske baare mein aur padhna padega. 🤔 Please visit 'Contact Us' section for assistance.";
+    }
+
+    function displayMessage(message, sender) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender === 'user' ? 'message-user' : 'message-bot');
+        messageElement.innerHTML = `<p>${message}</p>`;
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

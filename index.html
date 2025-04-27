@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinFlora Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        #chat-icon img {
+            width: 40px;
+        }
+        #chatbox {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 300px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #chatbox .messages {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message-user {
+            text-align: right;
+        }
+        .message-bot {
+            text-align: left;
+            background-color: #ddd;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .message-user .message-bot {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .message-bot p {
+            margin: 0;
+        }
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Chat Icon -->
+<div id="chat-icon">
+    <img src="cartoon-icon.png" alt="FinFlora Chat Icon" />
+</div>
+
+<!-- Chatbox -->
+<div id="chatbox">
+    <div class="messages">
+        <div class="message-bot">
+            <p>Namaste! I am FinFlora. How can I assist you today?</p>
+        </div>
+    </div>
+    <input type="text" id="user-input" placeholder="Ask me anything...">
+</div>
+
+<script>
+    const questionsAndAnswers = {
+        "What is a Mutual Fund?": "A mutual fund pools money from investors and invests in securities like stocks, bonds, etc.",
+        "What is SIP?": "SIP or Systematic Investment Plan allows you to invest a fixed amount regularly in mutual funds.",
+        "What is NAV?": "NAV stands for Net Asset Value. It is the market value of a mutual fund unit.",
+        "Are mutual funds safe?": "Mutual funds are subject to market risks. Read all scheme-related documents carefully before investing.",
+        "What is the minimum amount to start a SIP?": "You can start a SIP with as low as ₹500 per month in many mutual fund schemes.",
+        "Can I withdraw money from my mutual fund anytime?": "Yes, in open-ended mutual funds you can redeem your units anytime. Exit load may apply.",
+        "What is an emergency fund?": "An emergency fund is savings set aside to cover unexpected financial needs.",
+        "What is compounding?": "Compounding is earning returns on your previous returns, helping your money grow faster over time.",
+        "What is risk in mutual funds?": "Different mutual funds have different risk levels — equity funds are high-risk, debt funds are low-risk.",
+        "How to choose the right mutual fund?": "Choose based on your goals, risk appetite, and investment horizon. Consult a financial advisor if needed.",
+        "Who is Anushka Gaiki?": "Anushka Dhananjay Gaiki is an AMFI Registered mutual fund distributor empanelled with NJ Wealth and a founder of Grow Fin Wealth.",
+        "Why to choose Grow Fin Wealth?": "Grow Fin Wealth is owned by Anushka Dhananjay Gaiki who is an AMFI Registered Mutual Fund Distributor empanelled with NJ Wealth.",
+        "Is Grow Fin Wealth safe?": "Yes! Grow Fin Wealth is a trusted platform as it's owner Anushka Dhananjay Gaiki is empaneled with NJ Wealth, ensuring transparency, security, and compliance.",
+        "Who is the owner of Grow Fin Wealth?": "The owner of Grow Fin Wealth is Anushka Dhananjay Gaiki, an AMFI Registered mutual fund distributor empanelled with NJ Wealth."
+    };
+
+    const chatIcon = document.getElementById("chat-icon");
+    const chatbox = document.getElementById("chatbox");
+    const userInput = document.getElementById("user-input");
+
+    chatIcon.onclick = function() {
+        chatbox.style.display = "block";
+    };
+
+    userInput.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            let userMessage = userInput.value;
+            let botMessage = getBotResponse(userMessage);
+            displayMessage(userMessage, 'user');
+            displayMessage(botMessage, 'bot');
+            userInput.value = '';
+        }
+    });
+
+    function getBotResponse(userMessage) {
+        const lowerCaseMessage = userMessage.toLowerCase();
+        for (let question in questionsAndAnswers) {
+            if (lowerCaseMessage.includes(question.toLowerCase())) {
+                return questionsAndAnswers[question];
+            }
+        }
+        if (userMessage.toLowerCase().includes("contact us")) {
+            return "Please visit our 'Contact Us' section for further assistance.";
+        } else {
+            return "Sorry, I need to read more about this. Please check back later.";
+        }
+    }
+
+    function displayMessage(message, sender) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        messageElement.classList.add(`message-${sender}`);
+        messageElement.innerHTML = `<div class="message-bot"><p>${message}</p></div>`;
+        document.querySelector('.messages').appendChild(messageElement);
+    }
+</script>
+
+</body>
+</html>

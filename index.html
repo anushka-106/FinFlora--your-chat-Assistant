@@ -131,9 +131,6 @@
         const botReply = getBotResponse(message);
         setTimeout(() => {
             displayMessage(botReply, 'bot');
-            if (botReply.includes('Contact Us')) {
-                displayMessage("Visit 'Contact Us' section for more detailed help!", 'bot');
-            }
         }, 500);
     }
 
@@ -172,6 +169,15 @@
         messageElement.innerHTML = `<p>${message}</p>`;
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Function to toggle chatbox visibility
+    function toggleChatbox() {
+        if (chatbox.style.display === "none" || chatbox.style.display === "") {
+            chatbox.style.display = "block";
+        } else {
+            chatbox.style.display = "none";
+        }
     }
 </script>
 

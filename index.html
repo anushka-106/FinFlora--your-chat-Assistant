@@ -106,7 +106,7 @@
         "risk mutual fund": "Har mutual fund ka risk level alag hota hai: equity funds jyada risk wale, debt funds kam risk wale hote hain.",
         "choose right mutual fund": "Aapke investment goal, risk tolerance aur time horizon ke basis pe sahi mutual fund chunna chahiye. Advisor se salah lena bhi acha rahega.",
         "anushka gaiki": "Anushka Dhananjay Gaiki ek AMFI Registered Mutual Fund Distributor hain, aur Grow Fin Wealth ki founder hain.",
-        "grow fin wealth": "Grow Fin Wealth Anushka Dhananjay Gaiki ke dwara chalaya jata hai jo NJ Wealth ke sath empaneled hain.",
+        "grow fin wealth": "Grow Fin Wealth Anushka Dhananjay Gaiki ke dwara chalaya jata hai jo NJ Wealth ke through empaneled hain.",
         "safe grow fin wealth": "Haan! Grow Fin Wealth bilkul safe aur transparent platform hai kyunki iska operation NJ Wealth ke through registered hai."
     };
 
@@ -150,7 +150,7 @@
             return "I'm sorry! 😔 You can contact us through the 'Contact Us' section.";
         }
 
-        // Search FAQs
+        // Search FAQs based on keywords
         for (let keyword in questionsAndAnswers) {
             if (message.includes(keyword)) {
                 return questionsAndAnswers[keyword];
